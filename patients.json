@@ -48,16 +48,5 @@
         "weight": 75,
         "bmi": 31.22,
         "verdict": "Obese"
-    },
-    "P006": {
-        "id": "P006",
-        "name": "Patientame",
-        "city": "Patientity",
-        "age": 25,
-        "gender": "male",
-        "height": 25.0,
-        "weight": 25.0,
-        "bmi": 0.04,
-        "verdict": "Underweight"
     }
 }
