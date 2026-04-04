@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, computed_field
 from typing import Literal, Annotated
 import pickle
@@ -8,8 +9,9 @@ import pandas as pd
 with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
     
-# list of cities dividing them into tiers
 app = FastAPI()
+
+# list of cities dividing them into tiers
 tier_1_cities = ["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune"]
 tier_2_cities = [
     "Jaipur", "Chandigarh", "Indore", "Lucknow", "Patna", "Ranchi", "Visakhapatnam", "Coimbatore",
@@ -69,10 +71,21 @@ class UserInput(BaseModel):
         else:
             return 3
         
-        
+@app.post('/predict')
+def predict_premium(data: UserInput):
     
-
+    input_df = pd.DataFrame([{
+        'bmi': data.bmi,
+        'lifestyle_risk': data.lifestye_risk,
+        'age_group': data.age_group,
+        'city_tier': data.city_tier,
+        'income_lpa': data.income_lpa,
+        'occupation': data.occupation
+    }])
     
+    prediction = model.predict(input_df)[0]
+    
+    return JSONResponse(status_code=200, content={'Predicted Category': prediction})
 
 
 
