@@ -6,7 +6,7 @@ API_URL = "http://localhost:8000/predict"
 # Page config
 st.set_page_config(page_title="Insurance Predictor", layout="centered")
 
-st.title("💡 Insurance Premium Predictor")
+st.title("Insurance Premium Predictor")
 st.markdown("Fill the details and get instant prediction")
 
 # ---------------- INPUT SECTION ----------------
@@ -29,7 +29,7 @@ with st.form("prediction_form"):
 
     city = st.text_input("City", "Mumbai")
 
-    submit = st.form_submit_button("🔍 Predict")
+    submit = st.form_submit_button("Predict")
 
 # ---------------- RESULT SECTION ----------------
 if submit:
@@ -57,32 +57,30 @@ if submit:
             confidence = prediction.get("confidence", 0)
 
             # 🎯 SUCCESS CARD
-            st.markdown("### 🎯 Prediction Result")
+            st.markdown("### Prediction Result")
 
             if category.lower() == "low":
-                st.success(f"🟢 Category: {category}")
+                st.success(f"Category: {category}")
             elif category.lower() == "medium":
-                st.warning(f"🟡 Category: {category}")
+                st.warning(f"Category: {category}")
             else:
-                st.error(f"🔴 Category: {category}")
+                st.error(f"Category: {category}")
 
             # 📊 Metrics
-            col1, col2 = st.columns(2)
-            col1.metric("Confidence", f"{confidence:.2%}")
-            col2.metric("Risk Level", category)
+            st.metric("Risk Level", category)
 
             # 📈 Probabilities (optional)
             if "class_probabilities" in prediction:
-                st.markdown("### 📊 Class Probabilities")
+                st.markdown("### Class Probabilities")
                 st.bar_chart(prediction["class_probabilities"])
 
             # 🔍 Raw response (collapsible)
-            with st.expander("🔎 View Raw API Response"):
+            with st.expander("View Raw API Response"):
                 st.json(result)
 
         else:
-            st.error(f"❌ API Failed (Status {response.status_code})")
+            st.error(f"API Failed (Status {response.status_code})")
             st.text(response.text)
 
     except requests.exceptions.ConnectionError:
-        st.error("🚫 Cannot connect to FastAPI server (Is uvicorn running?)")
+        st.error("Cannot connect to FastAPI server (Is uvicorn running?)")
